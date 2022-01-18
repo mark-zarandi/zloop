@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+{% block scripts %}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="{{url_for('.static', filename='jQuery-Knob/dist/jquery.knob.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='js/application.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/round-slider@1.6.1/dist/roundslider.min.js"></script>    
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/round-slider@1.6.1/dist/roundslider.min.css" rel="stylesheet" />
+{% endblock %}
+
+</head>
+<body>
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+  <tr>
+
+    {% for i in range(8) %}
+    <th class="tg-0lax"><center><input type="text" id="txtBox{{ i }}" name="txtBox{{ i }}" /></center></th>
+    {% endfor %}
+
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    {% for i in range(8) %}
+    <td class="tg-0lax"><div id="slider{{ i }}"></div></td>
+{% endfor %}
+  </tr>
+</tbody>
+</table>
+
+
+
+
+
+
+        <p id="log">
+
+        </p> <!-- /#log -->
+
+
+
+</body>
+</html>
