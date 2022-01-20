@@ -12,9 +12,10 @@ $(document).ready(function(){
             max: 16, 
             editableToolTip: false,
             showToolTip: true,
-            tooltipFormat: function (e) {
-    return ((Math.floor(e.value/meter) + 1)+ " / " + ($("#slider" + i).data("roundSlider").option('max')/meter));
-    }
+            svgMode: true,
+    //         tooltipFormat: function (e) {
+    // return ((Math.floor(e.value/meter) + 1)+ " / " + ($("#slider" + i).data("roundSlider").option('max')/meter));
+    // }
 });
 
 
@@ -29,12 +30,12 @@ $(document).ready(function(){
 
 
        // $("#slider1").roundSlider({startAngle: 90, readOnly: true, min: 0, max: 100});
-    var socket = io.connect('http://' + document.domain + ':' + location.port + '/thermostat');
+    var socket = io.connect('http://' + 'localhost' + ':' + location.port + '/thermostat');
 
 
-    setInterval(function() {
-    socket.emit('time');
-}, 1);
+//     setInterval(function() {
+//     socket.emit('time');
+// }, 250);
 
     
     socket.on('time', function(data) {
@@ -42,10 +43,11 @@ $(document).ready(function(){
     beat = (data['time'][1]);
     if ((c_time[0]!=bar) || (c_time[1]!=beat)) {
         //debugging
-    // console.log("BAR" + bar + ", BEAT" + beat);
+    console.log("BAR" + bar + ", BEAT" + beat);
     // console.log(c_time + " " + data['time']);
     c_time[0] = data['time'][0];
     c_time[1] = data['time'][1];
+    update_it();
     }
 
 });
@@ -62,13 +64,14 @@ $(document).ready(function(){
         //     console.log(value['start_time'][0])
 
         // });
+        update_it();
 
 
     
 });
 
 
-    setInterval(function() {
+    function update_it() {
     for (i = 0; i <= 7; i++){
         var secHtml = $("#slider" + i);
         
@@ -81,6 +84,7 @@ $(document).ready(function(){
             secHtml.roundSlider('setValue', (((c_time[0]-1)*meter)+c_time[1])-1);
 
         } else if (tracks[i]['state']=="playing"){
+            secHtml.show();
             $("#txtBox"+i).val("made it");
             secHtml.roundSlider('setValue',((((c_time[0]-1)*meter)%look_here.option('max'))+c_time[1])-1);
         } else{
@@ -89,7 +93,7 @@ $(document).ready(function(){
 
 
         } 
-}, 1);
+}
 
 
     //receive details from server

@@ -1,4 +1,5 @@
 import logging
+from engineio.payload import Payload
 from logging import handlers
 from flask import Flask,render_template, request, g
 from flask import Flask, request, flash, url_for, redirect, \
@@ -36,8 +37,10 @@ logging.getLogger("requests").setLevel(logging.WARNING)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("isobar").setLevel(logging.INFO)
 #some good info here, remove to debug better.
-# logging.getLogger('socketio').setLevel(logging.ERROR)
-# logging.getLogger('engineio').setLevel(logging.ERROR)
+logging.getLogger('socketio').setLevel(logging.ERROR)
+logging.getLogger('engineio').setLevel(logging.ERROR)
+logging.getLogger('flask').setLevel(logging.ERROR)
+Payload.max_decode_packets = 16
 
 thread_stop_event = threading.Event()
 socket_thread = threading.Thread()
@@ -106,7 +109,7 @@ def try_it(timeline):
     time_tup = (int((zero_beat//4)+1),int((zero_beat%4)+1))
     song_time.put(time_tup)
     current_time = time_tup
-
+    socketio.emit('time', {'time': current_time}, namespace='/thermostat')
     logging.info(time_tup)
     if song_time.full():
         song_time.queue.clear()

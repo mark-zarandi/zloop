@@ -37,7 +37,7 @@ current_beat = 0
 
 
 
-class ZLoop(ControlSurface):
+class ZLoop():
     __module__ = __name__
     def __init__(self, c_instance):
 
@@ -83,6 +83,11 @@ class ZLoop(ControlSurface):
             self.slisten[slot] = cb   
     
     def rem_clip_listeners(self):
+        tracks = self.song.visible_tracks
+        #new
+        for track in tracks:
+            if track.name_has_listener(self.track_name_change(track)):
+                self.instance.show_message('Something here')
         for slot in self.slisten:
             if slot != None:
                 if slot.has_clip_has_listener(self.slisten[slot]) == 1:
@@ -179,6 +184,10 @@ class ZLoop(ControlSurface):
             myobj = {'time':str(y)}
             x = requests.post(self.the_url + ":" + str(self.the_port) + self.time_hook, data=json.dumps(myobj), json=json.dumps(myobj), headers=self.newHeaders)
             self.current_beat = y[1]
+    #new
+    def track_name_change(self, track):
+        self.instance.show_message("changed track name " + str(track))
+
 
     def setup_song_time_listener(self):
         if self.song.current_song_time_has_listener(self.time_notify):
@@ -190,7 +199,9 @@ class ZLoop(ControlSurface):
         self.setup_song_time_listener()
         tracks = self.song.visible_tracks
         clipSlots = []
+        #new
         for track in tracks:
+            track.add_name_listener(self.track_name_change)
             clipSlots.append(track.clip_slots)
         tracks = clipSlots
         for track in range(len(tracks)):
